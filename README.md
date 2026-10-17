@@ -27,13 +27,22 @@ npm run preview  # serve o build de produção
 ├── public/
 │   └── favicon.svg     # ícone da aba (bolt do Tabler Icons)
 ├── src/
-│   ├── main.js         # ponto de entrada JS
+│   ├── main.js         # ponto de entrada JS (só CSS + bootstrap do App)
 │   ├── css/
 │   │   ├── sidebar.css # CSS da sidebar (cópia do exemplo)
 │   │   └── style.css   # estilos do scaffold (header, toggle, card)
 │   └── js/
+│       ├── template.js          # classe Template (interpolação {{chave}})
+│       ├── router.js            # classe Router (rotas a partir de sidebar.items)
 │       └── components/
-│           └── sidebar.js # classe Sidebar (colapso, tema, clique-fora)
+│           ├── app/             # renderização do shell
+│           │   ├── renderer.js      # classe Renderer (DOM: mount/update/unmount)
+│           │   ├── app.js           # classe App (composição + wiring + destroy)
+│           │   └── app.templates.js # imports ?raw centralizados (satélite)
+│           └── sidebar/         # classe Sidebar (colapso, tema, clique-fora)
+│               ├── sidebar.js
+│               ├── sidebar.items.js   # fonte única de verdade das rotas
+│               └── sidebar.imports.js  # reservado para as features futuras
 └── templates/
     ├── card.raw        # templates HTML com extensão .raw
     ├── header.raw      # header do app (toggle da sidebar + marca + busca + tema)
@@ -105,38 +114,52 @@ import cardTemplate from '../templates/card.raw?raw';
 
 Sem o `?raw`, o Vite não resolve o arquivo. Com ele, qualquer extensão (`.raw`, `.html`, `.txt`) é importada como texto.
 
-O exemplo em `src/main.js` usa classes — `Template` renderiza placeholders `{{chave}}` e `App` monta o resultado no DOM:
+O template vira uma `class Template` (interpolação de `{{chave}}`) e o app usa três classes,
+cada uma com uma responsabilidade:
+
+- `src/js/template.js` — `Template.render(data)` devolve a string com os placeholders
+  preenchidos. Não escapa HTML: sirva só dados confiáveis.
+- `src/js/components/app/app.templates.js` — satélite que centraliza os imports `?raw`
+  (`card`, `header`, `sidebar`) e exporta `templates`.
+- `src/js/components/app/renderer.js` — `Renderer` é **só** a mecânica de DOM: valida o
+  elemento raiz no construtor (lança erro nomeando o seletor ausente) e expõe `mount(html)`,
+  `update(html)`, `unmount()` e `isMounted()`. Não conhece templates, rotas nem estado.
+- `src/js/components/app/app.js` — `App` compõe o shell (header + sidebar), delega a escrita
+  no DOM ao `Renderer`, orquestra `Router`/`Sidebar` e expõe `destroy()`.
 
 ```js
-class Template {
-  constructor(source) {
-    this.source = source;
-  }
+// src/main.js — entrypoint puro
+import { App } from './js/components/app/app.js';
 
-  render(data) {
-    return this.source.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? '');
-  }
-}
-
-class App {
-  constructor(rootSelector, template, data) {
-    this.root = document.querySelector(rootSelector);
-    this.template = template;
-    this.data = data;
-  }
-
-  mount() {
-    this.root.innerHTML = this.template.render(this.data);
-  }
-}
-
-new App('#app', new Template(cardTemplate), {
-  title: 'Olá',
-  body: 'Mundo',
-}).mount();
+new App('#app').mount();
 ```
 
-Troque por seu motor de templates preferido (Tagged templates, lit-html, etc.) conforme a necessidade do teste.
+Duas regras de composição importantes:
+
+1. **Ordem de init** — o `Sidebar` é conectado ao `Router` **antes** de `router.init()`. Assim a
+   navegação inicial já destaca no menu o item da rota carregada (abrir `/products` marca
+   *Products*, não *Dashboard*).
+2. **Escrita no DOM só no `Renderer`** — `App` monta strings, `Renderer` injeta. `destroy()` é
+   idempotente e esvazia o root.
+
+Troque o motor de template (Tagged templates, lit-html, etc.) mexendo só em `Template`;
+a camada de renderização não muda.
+
+## Conhecidos
+
+**Dupla navegação por clique no menu.** Clicar num item do menu chama `navigate()` duas vezes
+(2 `pushState` e uma entrada de histórico duplicada — o botão Voltar precisa de duas pressões
+para sair da rota). Causa raiz: o handler do `Sidebar` navega via callback, o que leva
+`Router.navigate()` → `sidebar.setActiveItem()` → `renderMenu()` a trocar `menuList.innerHTML`
+**durante o bubble** do clique; quando o evento chega ao handler de `document` do `Router`,
+`event.target` já está detached e `link.closest('.sidebar')` retorna `null`, fazendo
+`shouldInterceptLink()` tratar o link como externo ao sidebar. O `event.preventDefault()`
+desse segundo caminho é, acidentalmente, o que evita um reload completo da SPA. Correção exige
+tocar em `src/js/router.js`/`src/js/components/sidebar/sidebar.js` (não re-renderizar durante o
+dispatch, ou resolver a rota antes do re-render).
+
+**Listeners sem teardown.** `Router` (`popstate` + `click` em `document`) e
+`Sidebar.bindOutsideClick()` não removem seus listeners; `App.destroy()` só desmonta o DOM.
 
 ## Licença
 
