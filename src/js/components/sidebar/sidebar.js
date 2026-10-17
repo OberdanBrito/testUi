@@ -2,10 +2,11 @@ export class Sidebar {
   constructor(items) {
     this.items = items;
     this.root = document.body;
-    this.sidebar = document.querySelector('.sidebar');
-    this.themeToggleBtn = document.querySelector('.theme-toggle');
-    this.themeIcon = this.themeToggleBtn.querySelector('.theme-icon');
-    this.toggleButtons = document.querySelectorAll('.sidebar-toggle');
+    // O slot #sidebar envolve o aside.sidebar; a lógica de collapsed opera no aside
+    this.sidebar = document.querySelector('#sidebar .sidebar');
+    if (!this.sidebar) {
+      this.sidebar = document.querySelector('.sidebar');
+    }
     this.onNavigate = null;
   }
 
@@ -15,9 +16,6 @@ export class Sidebar {
 
   init() {
     this.renderMenu();
-    this.applySavedTheme();
-    this.updateThemeIcon();
-    this.bindThemeToggle();
     this.bindSidebarToggle();
     this.bindOutsideClick();
     this.expandOnLargeScreens();
@@ -91,6 +89,7 @@ export class Sidebar {
     const submenuLinks = this.sidebar.querySelectorAll('.submenu .menu-link');
     submenuLinks.forEach(link => {
       link.addEventListener('click', (e) => {
+        e.preventDefault();
         const submenu = link.closest('.submenu');
         if (submenu && !submenu.classList.contains('expanded')) {
           submenu.classList.add('expanded');
@@ -114,6 +113,7 @@ export class Sidebar {
     const simpleLinks = this.sidebar.querySelectorAll('.menu-item:not(.menu-category) .menu-link');
     simpleLinks.forEach(link => {
       link.addEventListener('click', (e) => {
+        e.preventDefault();
         const path = link.getAttribute('href');
         if (path && path !== '#' && this.onNavigate) {
           this.onNavigate(path);
@@ -122,33 +122,12 @@ export class Sidebar {
     });
   }
 
-  updateThemeIcon() {
-    const isDark = this.root.classList.contains('dark-theme');
-    this.themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
-    this.themeToggleBtn.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
-  }
-
-  applyTheme(isDark) {
-    this.root.classList.toggle('dark-theme', isDark);
-    document.documentElement.dataset.bsTheme = isDark ? 'dark' : 'light';
-    return isDark;
-  }
-
-  applySavedTheme() {
-    this.applyTheme(localStorage.getItem('theme') === 'dark');
-  }
-
-  bindThemeToggle() {
-    this.themeToggleBtn.addEventListener('click', () => {
-      const isDark = this.applyTheme(!this.root.classList.contains('dark-theme'));
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      this.updateThemeIcon();
-    });
-  }
+  // Theme logic moved to Header component
 
 
   bindSidebarToggle() {
-    this.toggleButtons.forEach((btn) => {
+    const toggleButtons = document.querySelectorAll('.sidebar-toggle');
+    toggleButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         this.sidebar.classList.toggle('collapsed');
       });
@@ -165,23 +144,41 @@ export class Sidebar {
   }
 
   expandOnLargeScreens() {
-    if (window.innerWidth > 768) this.sidebar.classList.remove('collapsed');
+    if (window.innerWidth > 768) {
+      // Remove collapsed sem animação no load (evita "slide" a cada carregamento)
+      this.sidebar.style.transition = 'none';
+      this.sidebar.classList.remove('collapsed');
+      requestAnimationFrame(() => {
+        this.sidebar.style.transition = '';
+      });
+    }
   }
 
   // Métodos públicos para gerenciar itens ativos
 
   setActiveItem(id) {
+    // Remove active from existing nodes
+    if (this.sidebar) {
+      this.sidebar.querySelectorAll('.menu-link.active').forEach((link) => {
+        link.classList.remove('active');
+      });
+    }
     this.clearActiveItems();
+
     const item = this.findItemById(id);
     if (item) {
       item.active = true;
-      this.renderMenu();
+      if (this.sidebar) {
+        const link = this.sidebar.querySelector(`.menu-link[data-id="${id}"]`);
+        if (link) {
+          link.classList.add('active');
+        }
+      }
     }
   }
 
   clearActiveItems() {
     this.clearActiveItemsRecursive(this.items);
-    this.renderMenu();
   }
 
   getActiveItem() {

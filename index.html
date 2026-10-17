@@ -5,10 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/src/css/main.css" />
     <title>Test UI</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" class="app-shell">
+      <header id="header" class="navbar navbar-expand-md">
+        <div class="container-fluid">
+          <button class="sidebar-toggle" aria-label="Toggle sidebar">
+            <span class="material-symbols-rounded" aria-hidden="true">menu</span>
+          </button>
+          <a class="navbar-brand" href="#">
+            <i class="ti ti-bolt"></i>
+            Test UI
+          </a>
+          <form action="#" class="search-form">
+            <span class="material-symbols-rounded" aria-hidden="true">search</span>
+            <input type="search" id="header-search" name="search" placeholder="Search..." aria-label="Search" required />
+          </form>
+          <button class="theme-toggle" aria-label="Switch to dark theme" title="Toggle theme">
+            <span class="theme-icon material-symbols-rounded" aria-hidden="true">dark_mode</span>
+          </button>
+        </div>
+      </header>
+      <div class="app-main">
+        <div class="container">
+          <div id="sidebar">
+            <aside class="sidebar collapsed">
+              <div class="sidebar-content">
+                <ul class="menu-list"></ul>
+              </div>
+            </aside>
+          </div>
+          <div class="main-content">
+            <div id="content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -186,19 +186,10 @@ novo (ex.: `FullWidthTemplate`), crie a classe estendendo `MainTemplate`, implem
 
 ## Conhecidos
 
-**Dupla navegação por clique no menu.** Clicar num item do menu chama `navigate()` duas vezes
-(2 `pushState` e uma entrada de histórico duplicada — o botão Voltar precisa de duas pressões
-para sair da rota). Causa raiz: o handler do `Sidebar` navega via callback, o que leva
-`Router.navigate()` → `sidebar.setActiveItem()` → `renderMenu()` a trocar `menuList.innerHTML`
-**durante o bubble** do clique; quando o evento chega ao handler de `document` do `Router`,
-`event.target` já está detached e `link.closest('.sidebar')` retorna `null`, fazendo
-`shouldInterceptLink()` tratar o link como externo ao sidebar. O `event.preventDefault()`
-desse segundo caminho é, acidentalmente, o que evita um reload completo da SPA. Correção exige
-tocar em `src/js/router.js`/`src/js/components/sidebar/sidebar.js` (não re-renderizar durante o
-dispatch, ou resolver a rota antes do re-render).
-
-**Listeners sem teardown.** `Router` (`popstate` + `click` em `document`) e
-`Sidebar.bindOutsideClick()` não removem seus listeners; `App.destroy()` só desmonta o DOM.
+**Listeners sem teardown (shell).** `Router` (`popstate` + `click` em `document`) e
+`Sidebar.bindOutsideClick()` ficam vinculados vitalício — aceitável porque o shell é montado
+uma única vez; na troca de rota o `Router` chama `feature?.destruir?.()` (opt-in) na feature
+anterior.
 
 ## Licença
 
