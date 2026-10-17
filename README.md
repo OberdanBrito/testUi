@@ -145,6 +145,45 @@ Duas regras de composição importantes:
 Troque o motor de template (Tagged templates, lit-html, etc.) mexendo só em `Template`;
 a camada de renderização não muda.
 
+## Herança de templates (padrão Flutter)
+
+Telas seguem o padrão Flutter: a **feature estende um template base** e só implementa o
+conteúdo. Hierarquia em `src/js/components/templates/`:
+
+```
+MainTemplate (abstrato)  →  PageTemplate (scaffold)  →  Feature (renderContent)
+```
+
+- `MainTemplate.js` — contrato comum: `render()`, `findSlot()` e `renderContent()` são
+  abstratos (lançam erro se chamados direto); `mount(container)` e `setContent(html)` são
+  concretos. `mount()` faz a sequência fixa: injeta `render()`, guarda `this.root`, acha o slot
+  via `findSlot()`, chama `renderContent()` e injeta via `setContent()` (innerHTML — o conteúdo
+  **não** passa pelo motor `Template`, então `{{...}}` dentro dele aparece literal).
+- `PageTemplate.js` + `page.imports.js` — template concreto: `render()` usa `templates/page.raw`
+  (`{{title}}`, `{{subtitle}}`; subtítulo vazio some via `.page-subtitle:empty`) e `findSlot()`
+  devolve `.page-content`.
+- Features em `src/js/features/<nome>/` estendem o template que quiserem e definem
+  título/subtítulo no `super({ title, subtitle })` — a fonte definitiva é a própria feature;
+  o `subtitle` de `sidebar.items.js` é só registro.
+
+```js
+// src/js/features/dashboard/DashboardFeature.js
+export class DashboardFeature extends PageTemplate {
+  constructor() {
+    super({ title: 'Dashboard', subtitle: 'Overview and insights' });
+  }
+  renderContent() {
+    return `<div class="route-placeholder"><p>Dashboard em desenvolvimento...</p></div>`;
+  }
+}
+```
+
+O `Router` só instancia a feature da rota (`new route.component().mount(container)`) — não
+conhece templates. Rota sem feature cai num placeholder simples, sem scaffold. Para um layout
+novo (ex.: `FullWidthTemplate`), crie a classe estendendo `MainTemplate`, implemente
+`render()`/`findSlot()` e pronto: o Router não muda. As classes de feature entram em
+`sidebar.imports.js` (features não implementadas ficam `null`).
+
 ## Conhecidos
 
 **Dupla navegação por clique no menu.** Clicar num item do menu chama `navigate()` duas vezes

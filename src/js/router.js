@@ -4,11 +4,15 @@ const defaultRoute = '/dashboard';
 const notFoundRoute = '/dashboard';
 
 export class Router {
-  constructor(containerSelector) {
+  constructor(containerSelector = '#content') {
     this.container = document.querySelector(containerSelector);
+    if (!this.container) {
+      this.container = document.querySelector('#route-container');
+    }
     this.sidebar = null;
     this.currentRoute = null;
     this.routeHistory = [];
+    this.currentFeature = null;
   }
 
   setSidebar(sidebarInstance) {
@@ -88,13 +92,13 @@ export class Router {
     const item = this.findItemByPath(sidebarItems, path);
 
     if (item) {
+      // title/subtitle não vêm daqui: a feature os define no constructor (super({ title, subtitle }))
       return {
         id: item.id,
         path: item.path,
         label: item.label,
         icon: item.icon,
-        component: item.feature,
-        title: item.label
+        component: item.feature
       };
     }
 
@@ -116,20 +120,27 @@ export class Router {
   renderRoute(route) {
     if (!this.container) return;
 
-    // Se não tiver componente, renderiza placeholder
-    if (!route.component) {
-      this.container.innerHTML = `
-        <div class="route-placeholder">
-          <h2>${route.title}</h2>
-          <p>Feature em desenvolvimento...</p>
-        </div>
-      `;
+    // Destruir feature anterior, se existir
+    if (this.currentFeature && typeof this.currentFeature.destruir === 'function') {
+      this.currentFeature.destruir();
+    }
+    this.currentFeature = null;
+
+    // Contrato de recurso: classe que extende um template base e implementa renderContent()
+    const feature = route.component;
+    if (typeof feature === 'function') {
+      const featureInstance = new feature();
+      featureInstance.mount(this.container);
+      this.currentFeature = featureInstance;
       return;
     }
 
-    // Futuro: instanciar e renderizar componente
-    // const component = new route.component();
-    // this.container.innerHTML = component.render();
+    // Sem feature: placeholder simples, sem scaffold de template
+    this.container.innerHTML = `
+      <div class="route-placeholder">
+        <p>Feature em desenvolvimento...</p>
+      </div>
+    `;
   }
 
   handlePopState(event) {

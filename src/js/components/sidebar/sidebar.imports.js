@@ -1,11 +1,22 @@
-// Centraliza imports de features/módulos do sidebar
-// Este arquivo será usado quando as features forem implementadas
+// Centraliza imports das classes de feature usadas pelo sidebar.items.js
+import { DashboardFeature } from '../../features/dashboard/DashboardFeature.js';
 
-// Exemplo futuro:
-// export { DashboardFeature } from '../../features/dashboard.js';
-// export { AnalyticsFeature } from '../../features/analytics.js';
-// export { ProductsFeature } from '../../features/products.js';
-// export { SettingsFeature } from '../../features/settings.js';
-
-// Por enquanto, exporta um objeto vazio
-export const features = {};
+// Features ainda não implementadas ficam nulas: o Router exibe o placeholder simples
+export const features = {
+  dashboard: DashboardFeature,
+  analytics: null,
+  reports: null,
+  statistics: null,
+  realtime: null,
+  notifications: null,
+  favourites: null,
+  products: null,
+  inventory: null,
+  orders: null,
+  invoices: null,
+  customers: null,
+  settings: null,
+  account: null,
+  security: null,
+  preferences: null
+};
