@@ -1,0 +1,4 @@
+<article class="card">
+  <h1><i class="ti ti-bolt"></i> {{title}}</h1>
+  <p>{{body}}</p>
+</article>

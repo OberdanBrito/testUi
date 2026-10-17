@@ -1,0 +1,15 @@
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar collapsed">
+        <div class="sidebar-content">
+          <!-- Sidebar Menu -->
+          <ul class="menu-list"></ul>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <div id="route-container">
+          <!-- Conteúdo dinâmico do roteador será renderizado aqui -->
+        </div>
+      </div>
+    </div>

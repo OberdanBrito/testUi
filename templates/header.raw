@@ -1,0 +1,18 @@
+<header class="navbar navbar-expand-md">
+  <div class="container-fluid">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">
+      <span class="material-symbols-rounded" aria-hidden="true">menu</span>
+    </button>
+    <a class="navbar-brand" href="#">
+      <i class="ti ti-bolt"></i>
+      Test UI
+    </a>
+    <form action="#" class="search-form">
+      <span class="material-symbols-rounded" aria-hidden="true">search</span>
+      <input type="search" id="header-search" name="search" placeholder="Search..." aria-label="Search" required />
+    </form>
+    <button class="theme-toggle" aria-label="Switch to dark theme" title="Toggle theme">
+      <span class="theme-icon material-symbols-rounded" aria-hidden="true">dark_mode</span>
+    </button>
+  </div>
+</header>

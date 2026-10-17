@@ -1,0 +1,26 @@
+{
+  "name": "vite-ui-template",
+  "version": "1.0.0",
+  "description": "Boilerplate de testes de UI com JavaScript puro (HTML/CSS/JS) + Vite + templates .raw",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "vite",
+    "template",
+    "boilerplate",
+    "ui",
+    "javascript"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@tabler/core": "^1.6.1",
+    "@tabler/icons-webfont": "^3.49.0"
+  }
+}
