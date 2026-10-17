@@ -8,6 +8,8 @@ dist
 .omo/
 .opencode/
 .playwright-mcp/
+.windsurf
+.idea/
 
 # Logs
 *.log
