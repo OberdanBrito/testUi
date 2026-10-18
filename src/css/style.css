@@ -150,6 +150,9 @@ body {
 
 .page-icon {
   font-size: 1.5rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .page-icon:empty {
@@ -160,6 +163,10 @@ body {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+}
+
+.page-header-identity .page-title-row .page-title {
+  margin-bottom: 0;
 }
 
 .page-header-actions {
