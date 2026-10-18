@@ -24,7 +24,6 @@ export class CustomersFeature extends GridTemplate {
   renderGridConfig() {
     return {
       data: customerData,
-      layout: 'fitColumns',
       columns: [
         { title: 'ID', field: 'id', width: 80 },
         { title: 'Name', field: 'name' },

@@ -1,6 +1,6 @@
 import { Template } from '../../template.js';
 import { MainTemplate } from './MainTemplate.js';
-import { Tabulator } from 'tabulator-tables';
+import { CustomTabulator } from '../tabulator/CustomTabulator.js';
 import { gridTemplates } from './grid.imports.js';
 
 export class GridTemplate extends MainTemplate {
@@ -22,7 +22,7 @@ export class GridTemplate extends MainTemplate {
   }
 
   renderContent(slot) {
-    this.tabulator = new Tabulator(slot, this.renderGridConfig());
+    this.tabulator = new CustomTabulator(slot, this.renderGridConfig());
     return null;
   }
 }
