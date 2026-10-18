@@ -12,6 +12,39 @@
     <div class="page-header-actions"></div>
   </header>
   <div class="page-body">
-    <div class="grid-container"></div>
+    <div class="card grid-card">
+      <div class="card-body border-bottom py-3">
+        <div class="d-flex">
+          <div class="text-secondary">
+            Show
+            <div class="mx-2 d-inline-block">
+              <input type="text" class="form-control form-control-sm grid-page-size" value="8" size="3" aria-label="Entries per page">
+            </div>
+            entries
+          </div>
+          <div class="ms-auto text-secondary">
+            Search:
+            <div class="ms-2 d-inline-block">
+              <input type="text" class="form-control form-control-sm grid-search" aria-label="Search">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <div class="grid-container"></div>
+      </div>
+      <div class="card-footer">
+        <div class="row g-2 justify-content-center justify-content-sm-between">
+          <div class="col-auto d-flex align-items-center">
+            <p class="m-0 text-secondary grid-page-info"></p>
+          </div>
+          <div class="col-auto">
+            <nav aria-label="Pagination">
+              <ul class="pagination m-0 ms-auto grid-pagination"></ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

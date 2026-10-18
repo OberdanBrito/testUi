@@ -1,0 +1,151 @@
+/* grid-tabler-visual — chrome de card e paridade visual do Tabulator com o .table.card-table do Tabler */
+
+.grid-card {
+  max-width: none;
+}
+
+.grid-card .card-footer {
+  background: transparent;
+}
+
+.grid-page-size {
+  width: 3.5rem;
+}
+
+.grid-search {
+  width: 210px;
+}
+
+.grid-container.tabulator {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--tblr-body-color);
+}
+
+.grid-container.tabulator .tabulator-tableholder,
+.grid-container.tabulator .tabulator-table {
+  background: transparent;
+}
+
+/* Paginação do Tabulator fica oculta: o chrome usa o .card-footer */
+.grid-container.tabulator .tabulator-footer {
+  display: none;
+}
+
+/* Cabeçalho — paridade com .table thead th do Tabler */
+.grid-container.tabulator .tabulator-header {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--tblr-table-border-color, var(--tblr-border-color));
+  color: var(--tblr-secondary);
+  font-weight: inherit;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col {
+  background: transparent;
+  border: none;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0.5rem 0.75rem;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col:first-child .tabulator-col-content {
+  padding-inline-start: 1.25rem;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col:last-child .tabulator-col-content {
+  padding-inline-end: 1.25rem;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+  color: var(--tblr-secondary);
+  font-size: 0.75rem;
+  font-weight: var(--tblr-font-weight-medium, 500);
+  letter-spacing: 0.04em;
+  line-height: 1rem;
+  text-transform: uppercase;
+}
+
+/* Sort: chevron só na coluna ordenada (paridade com a captura).
+   !important pontual: o tabulator.min.css é injetado depois do main.css e usa
+   cadeias com especificidade igual/maior (0,5,0–0,8,0) para sorter/arrow. */
+.grid-container.tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover {
+  background-color: var(--tblr-table-hover-bg, rgba(62, 65, 71, 0.03)) !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-title-holder {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+  flex-shrink: 0 !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-sorter {
+  position: static !important;
+  display: none !important;
+  margin-left: 4px !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col[aria-sort='ascending'] .tabulator-col-sorter,
+.grid-container.tabulator .tabulator-header .tabulator-col[aria-sort='descending'] .tabulator-col-sorter {
+  display: block !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col .tabulator-col-sorter .tabulator-arrow {
+  border: none !important;
+  width: 12px !important;
+  height: 12px !important;
+  background: center / 12px no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23868e96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 15l6 -6l6 6'/%3E%3C/svg%3E") !important;
+}
+
+.grid-container.tabulator .tabulator-header .tabulator-col[aria-sort='descending'] .tabulator-col-sorter .tabulator-arrow {
+  transform: rotate(180deg) !important;
+}
+
+/* Linhas — paridade com .table.card-table do Tabler */
+.grid-container.tabulator .tabulator-row {
+  background: transparent !important;
+  border: none;
+  border-bottom: 1px solid var(--tblr-table-border-color, var(--tblr-border-color));
+}
+
+.grid-container.tabulator .tabulator-row:last-child {
+  border-bottom: 0;
+}
+
+.grid-container.tabulator .tabulator-row:hover,
+.grid-container.tabulator .tabulator-row.tabulator-row-even:hover {
+  background: var(--tblr-table-hover-bg, rgba(62, 65, 71, 0.03)) !important;
+}
+
+.grid-container.tabulator .tabulator-row .tabulator-cell {
+  border: none;
+  padding: 0.75rem;
+  color: var(--tblr-table-color, var(--tblr-body-color));
+  background: transparent;
+}
+
+.grid-container.tabulator .tabulator-row .tabulator-cell:first-child {
+  padding-inline-start: 1.25rem;
+}
+
+.grid-container.tabulator .tabulator-row .tabulator-cell:last-child {
+  padding-inline-end: 1.25rem;
+}
+
+.grid-container.tabulator .tabulator-placeholder {
+  border: none;
+  background: transparent;
+}
+
+.grid-container.tabulator .tabulator-placeholder .tabulator-placeholder-contents {
+  color: var(--tblr-secondary);
+  padding: 1.5rem;
+  text-align: center;
+}
