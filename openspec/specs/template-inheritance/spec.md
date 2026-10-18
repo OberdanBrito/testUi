@@ -79,6 +79,6 @@ O método `renderContent(slot)` SHALL receber o slot de destino e SHALL suportar
 - **THEN** o mount injeta o HTML no slot via `setContent()` exatamente como antes da mudança
 
 #### Scenario: Template concreto montando widget e delegando config à feature
-- **WHEN** `GridTemplate` implementa `renderContent(slot)` instanciando `new Tabulator(slot, this.renderGridConfig())` e a feature implementa `renderGridConfig()`
-- **THEN** o Tabulator fica montado dentro do slot e o mount não injeta HTML no slot, e a configuração (colunas/dados) vem da feature
+- **WHEN** `GridTemplate` implementa `renderContent(slot)` instanciando `new CustomTabulator(slot, this.renderGridConfig())` e a feature implementa `renderGridConfig()`
+- **THEN** o `CustomTabulator` fica montado dentro do slot e o mount não injeta HTML no slot, e a configuração (colunas/dados) vem da feature
 
