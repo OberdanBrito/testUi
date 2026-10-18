@@ -1,0 +1,17 @@
+<section class="page">
+  <header class="page-header">
+    <div class="page-header-identity">
+      <nav class="page-breadcrumb" aria-label="breadcrumbs"></nav>
+      <div class="page-pretitle"></div>
+      <div class="page-title-row">
+        <span class="page-icon material-symbols-rounded" aria-hidden="true"></span>
+        <h1 class="page-title"></h1>
+      </div>
+      <p class="page-subtitle"></p>
+    </div>
+    <div class="page-header-actions"></div>
+  </header>
+  <div class="page-body">
+    <div class="form-container"></div>
+  </div>
+</section>

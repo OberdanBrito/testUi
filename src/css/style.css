@@ -192,3 +192,17 @@ body {
 .page-content {
   min-height: 1px;
 }
+
+/* Form styles - Tabler IO compatible */
+.form-label.required::after {
+  content: ' *';
+  color: var(--tblr-danger);
+}
+
+.form-container {
+  padding: 0;
+}
+
+.card {
+  margin-bottom: 0;
+}

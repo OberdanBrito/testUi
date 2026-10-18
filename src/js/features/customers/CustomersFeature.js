@@ -1,4 +1,5 @@
 import { GridTemplate } from '../../components/templates/GridTemplate.js';
+import {CustomerFormFeature} from "./CustomerFormFeature.js";
 
 const customerData = [
   { id: 1, name: 'Acme Corp', email: 'contact@acme.com', status: 'active' },
@@ -12,13 +13,23 @@ export class CustomersFeature extends GridTemplate {
     super();
   }
 
-  renderHeader() {
-    return `
-      <button type="button" class="btn btn-primary">
-        <i class="ti ti-plus"></i>
-        New customer
-      </button>
+  renderButtons() {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-primary';
+    button.innerHTML = `
+      <i class="ti ti-plus"></i>
+      New customer
     `;
+    button.addEventListener('click', () => {
+      new CustomerFormFeature().render();
+    });
+
+    return button.innerHTML;
+  }
+
+  renderHeader() {
+    return this.renderButtons();
   }
 
   renderGridConfig() {
@@ -29,6 +40,19 @@ export class CustomersFeature extends GridTemplate {
         { title: 'Name', field: 'name' },
         { title: 'Email', field: 'email' },
         { title: 'Status', field: 'status' },
+        {
+          title: 'Actions',
+          field: 'actions',
+          width: 100,
+          formatter: (cell) => {
+            const rowData = cell.getRow().getData();
+            return `
+              <button class="btn btn-sm" onclick="window.location.href='/customers/edit?id=${rowData.id}'">
+                <i class="ti ti-edit"></i>
+              </button>
+            `;
+          },
+        },
       ],
     };
   }
