@@ -2,7 +2,20 @@ import { PageTemplate } from '../../components/templates/PageTemplate.js';
 
 export class DashboardFeature extends PageTemplate {
   constructor() {
-    super({ title: 'Dashboard', subtitle: 'Overview and insights' });
+    super();
+  }
+
+  renderHeader() {
+    return `
+      <button type="button" class="btn">
+        <i class="ti ti-download"></i>
+        Export
+      </button>
+      <button type="button" class="btn btn-primary">
+        <i class="ti ti-plus"></i>
+        New report
+      </button>
+    `;
   }
 
   renderContent() {

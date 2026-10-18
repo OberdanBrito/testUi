@@ -92,12 +92,14 @@ export class Router {
     const item = this.findItemByPath(sidebarItems, path);
 
     if (item) {
-      // title/subtitle não vêm daqui: a feature os define no constructor (super({ title, subtitle }))
+      // title/subtitle/identidade vêm do registro de rotas (sidebar.items.js)
       return {
         id: item.id,
         path: item.path,
         label: item.label,
         icon: item.icon,
+        subtitle: item.subtitle,
+        parent_id: item.parent_id,
         component: item.feature
       };
     }
@@ -130,7 +132,7 @@ export class Router {
     const feature = route.component;
     if (typeof feature === 'function') {
       const featureInstance = new feature();
-      featureInstance.mount(this.container);
+      featureInstance.mount(this.container, route);
       this.currentFeature = featureInstance;
       return;
     }

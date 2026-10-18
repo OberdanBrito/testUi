@@ -1,9 +1,11 @@
+import { PageHeader } from './PageHeader.js';
+
 export class MainTemplate {
-  constructor({ title = '', subtitle = '' } = {}) {
-    this.title = title;
-    this.subtitle = subtitle;
+  constructor() {
     this.root = null;
     this.slot = null;
+    this.route = null;
+    this.header = null;
   }
 
   render() {
@@ -18,11 +20,26 @@ export class MainTemplate {
     throw new Error('renderContent() must be implemented by subclass');
   }
 
-  mount(container) {
+  renderHeader() {
+    return '';
+  }
+
+  mount(container, route) {
+    this.route = route ?? null;
     container.innerHTML = this.render();
     this.root = container;
+    this.header = new PageHeader(this.route);
+    this.header.mount(container);
     this.slot = this.findSlot();
+    this.setHeaderContent(this.renderHeader());
     this.setContent(this.renderContent());
+    return this;
+  }
+
+  setHeaderContent(html) {
+    if (this.header) {
+      this.header.setActions(html);
+    }
     return this;
   }
 
