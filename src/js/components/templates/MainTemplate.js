@@ -16,7 +16,7 @@ export class MainTemplate {
     throw new Error('findSlot() must be implemented by subclass');
   }
 
-  renderContent() {
+  renderContent(slot) {
     throw new Error('renderContent() must be implemented by subclass');
   }
 
@@ -32,7 +32,10 @@ export class MainTemplate {
     this.header.mount(container);
     this.slot = this.findSlot();
     this.setHeaderContent(this.renderHeader());
-    this.setContent(this.renderContent());
+    const content = this.renderContent(this.slot);
+    if (content) {
+      this.setContent(content);
+    }
     return this;
   }
 

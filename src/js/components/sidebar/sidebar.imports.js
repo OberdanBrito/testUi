@@ -1,5 +1,6 @@
 // Centraliza imports das classes de feature usadas pelo sidebar.items.js
 import { DashboardFeature } from '../../features/dashboard/DashboardFeature.js';
+import { CustomersFeature } from '../../features/customers/CustomersFeature.js';
 
 // Features ainda não implementadas ficam nulas: o Router exibe o placeholder simples
 export const features = {
@@ -14,7 +15,7 @@ export const features = {
   inventory: null,
   orders: null,
   invoices: null,
-  customers: null,
+  customers: CustomersFeature,
   settings: null,
   account: null,
   security: null,

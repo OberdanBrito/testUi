@@ -3,15 +3,17 @@
 ## Purpose
 
 Define como features são selecionadas e associadas a rotas: toda feature associada a uma rota é uma classe que estende um template base, recebe a identidade (título/subtítulo) do route em vez do constructor, é instanciada pelo Router com `mount(container, route)`, e pode escolher livremente qual template estender.
-
 ## Requirements
-
 ### Requirement: Features devem estender um template base
-Toda feature associada a uma rota MUST ser uma classe JavaScript que estende um template base (ex: `PageTemplate`, `FullWidthTemplate`). A feature SHALL implementar o método `renderContent()` devolvendo o HTML do conteúdo específico daquela feature. O constructor da feature SHALL ser apenas `super()` — wiring puro, sem lógica e sem definição de título/subtítulo.
+Toda feature associada a uma rota MUST ser uma classe JavaScript que estende um template base (ex: `PageTemplate`, `GridTemplate`, `FullWidthTemplate`). A feature SHALL implementar o método `renderContent()` — devolvendo o HTML do conteúdo específico daquela feature (caminho HTML string) ou recebendo o slot de destino para montar widgets como Tabulator (caminho widget, ver contrato em `template-inheritance`). O constructor da feature SHALL ser apenas `super()` — wiring puro, sem lógica e sem definição de título/subtítulo.
 
 #### Scenario: Feature estendendo PageTemplate
 - **WHEN** `DashboardFeature` estende `PageTemplate` e implementa `renderContent()`
 - **THEN** instâncias de `DashboardFeature` renderizam o scaffold de página com o conteúdo específico do dashboard
+
+#### Scenario: Feature estendendo GridTemplate
+- **WHEN** uma feature estende `GridTemplate` e implementa `renderGridConfig()` devolvendo `{ columns, data }`
+- **THEN** instâncias dessa feature renderizam o scaffold de grid com a tabela Tabulator (criada pelo GridTemplate) dentro do container `.grid-container`
 
 #### Scenario: Feature estendendo template alternativo
 - **WHEN** `AnalyticsFeature` estende `FullWidthTemplate` e implementa `renderContent()`
@@ -72,3 +74,4 @@ O sistema SHALL permitir que diferentes features estendam diferentes templates b
 #### Scenario: Adição de novo template
 - **WHEN** um novo template `ModalTemplate` é criado e uma feature `SettingsFeature` o estende
 - **THEN** o Router funciona sem mudanças, instanciando `SettingsFeature` normalmente
+

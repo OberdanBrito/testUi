@@ -1,6 +1,8 @@
 // Tabler (tabler.io) — JS do Tabler; CSS vem via <link> no index.html (evita FOUC)
 import '@tabler/core/dist/js/tabler.min.js';
 
+import 'tabulator-tables/dist/css/tabulator.min.css';
+
 import { Header } from './js/components/header/header.js';
 import { Sidebar } from './js/components/sidebar/sidebar.js';
 import { sidebarItems } from './js/components/sidebar/sidebar.items.js';
